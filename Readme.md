@@ -11,7 +11,7 @@ This project implements an Auto-encoder, a type of neural network used for unsup
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone <repository-url> 
    ```
 2. Install dependencies:
    ```bash
