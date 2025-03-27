@@ -6,7 +6,7 @@ This project implements an Auto-encoder, a type of neural network used for unsup
 ## Features
 - Dimensionality reduction
 - Data reconstruction
-- Customizable architecture
+- Customizable architecture 
 
 ## Installation
 1. Clone the repository:
