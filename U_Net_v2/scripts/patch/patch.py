@@ -26,6 +26,10 @@ for img_name in tqdm(data_images):
     data_path = os.path.join(data_folder, img_name)
     mask_path = os.path.join(mask_folder, img_name)  # Assuming mask has the same filename!
 
+    # Check if the mask file exists
+    if not os.path.isfile(mask_path):
+        raise FileNotFoundError(f"Error: Corresponding mask file '{img_name}' does not exist in '{mask_folder}'.")
+
     # Load images
     data_img = cv2.imread(data_path)
     data_img = cv2.cvtColor(data_img, cv2.COLOR_BGR2RGB)
