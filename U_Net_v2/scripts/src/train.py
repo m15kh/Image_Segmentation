@@ -28,7 +28,7 @@ class SegmentationTrain(TrainBaseModule):
                   lr:float, 
                   checkpoint_path:str, 
                   experiment_path:str, 
-                  val_percent=0.1,
+                  val_percent=0.2,
                   pretrain_path: str = None):  # Add pretrain_path parameter
         self.image_path = image_path
         self.mask_path = mask_path
@@ -104,7 +104,7 @@ class SegmentationTrain(TrainBaseModule):
         self.optimizer.step()
         return loss.item()
 
-    def calculate_accuracy(self, y_pred, y):
+    def _calculate_accuracy(self, y_pred, y):
         """Calculate accuracy by comparing predictions with ground truth."""
         y_pred = (y_pred > 0.5).float()  # Convert probabilities to binary predictions
         correct = (y_pred == y).float().sum()
@@ -123,7 +123,7 @@ class SegmentationTrain(TrainBaseModule):
 
                 # Calculate accuracy
                 y_pred = self.model(x)
-                accuracy = self.calculate_accuracy(y_pred, y)
+                accuracy = self._calculate_accuracy(y_pred, y)
                 epoch_train_accuracy += accuracy.item()
 
                 t.set_postfix(train_loss=epoch_train_loss / len(t), train_acc=epoch_train_accuracy / len(t))
@@ -176,7 +176,7 @@ class SegmentationTrain(TrainBaseModule):
                 epoch_loss += loss.item()
 
                 # Calculate accuracy
-                accuracy = self.calculate_accuracy(y_pred, y)
+                accuracy = self._calculate_accuracy(y_pred, y)
                 epoch_accuracy += accuracy.item()
         return epoch_loss / len(self.valid_loader), epoch_accuracy / len(self.valid_loader)
 

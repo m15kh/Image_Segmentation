@@ -1,6 +1,9 @@
 segmentation_fingerprint:
-  input_dir: /home/ubuntu/m15kh/PFR/output/test
+  input_dir: /home/ubuntu/m15kh/U_NET/U_Net_v2/output/img_data
   file_extention: png
-  checkpoint_path: /home/ubuntu/m15kh/PFR/PFR/src/extractor/segmentation/checkpoints/extraction/segmentation/segmentation_epoch_64_loss_0.154.pth
-  output_path: /home/ubuntu/m15kh/PFR/output/result/
+  checkpoint_path: /home/ubuntu/m15kh/U_NET/U_Net_v2/segmentation_epoch_22_loss_0.223_patch_1360_with_dialte.pth
+  output_path: /home/ubuntu/m15kh/U_NET/U_Net_v2/output/result/
   batch_size: 1
+  patch_size: 1360
+  overlap: 0.1
+  use_empatches: true
