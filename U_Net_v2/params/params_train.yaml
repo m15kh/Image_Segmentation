@@ -1,0 +1,14 @@
+segmentation_fingerprint:
+  image_path: /home/fteam6/m15kh/U_NET/U_Net_v2/data/data_test/test
+  image_extention: png
+  mask_path: /home/fteam6/m15kh/U_NET/U_Net_v2/data/data_test/mask_data
+  mask_extention: png
+  is_skeleton: false
+  is_ridge_white: false
+  checkpoint_path: checkpoints/extraction/segmentation
+  experiment_path: results/segmentation_train
+  height: 2400
+  width: 2592
+  batch_size: 1
+  epochs: 70
+  learning_rate: 1e-4
