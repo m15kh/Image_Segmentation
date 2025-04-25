@@ -1,60 +1,51 @@
-# Auto-encoder and U-Net
+# U-Net and AutoEncoder Repository
 
 ## Overview
-This project implements two neural network architectures: Auto-encoder and U-Net. Auto-encoders are used for unsupervised learning, focusing on encoding input data into a compressed representation and reconstructing the original data. U-Net is a convolutional network architecture designed for image segmentation tasks.
 
-## Features
-- Auto-encoder:
-   - Dimensionality reduction
-   - Data reconstruction
-   - Customizable architecture
-- U-Net:
-   - Image segmentation
-   - Encoder-decoder structure
-   - Skip connections for better feature preservation
+This repository contains implementations for:
 
-## Installation
-1. Clone the repository:
-    ```bash
-    git clone <repository-url> 
-    ```
-2. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
+1. **U-Net**: A semantic segmentation model with training and inference capabilities.
+2. **U-Net_v2**: An improved version of U-Net with a better structure, recommended for use.
+3. **AutoEncoder**: Includes both vanilla and CNN-based autoencoder implementations.
+
+## Structure
+
+```
+/U_NET/
+├── U_Net/               # Original U-Net implementation
+│   ├── models/          # Model architecture, training, and inference scripts
+│   └── data/            # Dataset for training and testing
+├── U_Net_v2/            # Improved U-Net implementation
+│   ├── scripts/         # Training, inference, and preprocessing scripts
+│   └── params/          # Configuration files for training and inference
+├── Auto_Encoder/        # AutoEncoder implementations
+│   ├── vanilla_autoencoder/  # Vanilla autoencoder
+│   └── cnn-autoencoder/      # CNN-based autoencoder
+└── Readme.md            # Repository documentation
+```
+
+## Recommendations
+
+- **For Semantic Segmentation**: Use `U_Net_v2` as it has a better structure and improved functionality compared to the original `U_Net`.
+- **For AutoEncoding Tasks**: Explore the `Auto_Encoder` folder for vanilla and CNN-based autoencoder implementations.
 
 ## Usage
-### Auto-encoder
-1. Train the Auto-encoder:
-    ```bash
-    python auto_encoder/train.py
-    ```
-2. Evaluate the Auto-encoder:
-    ```bash
-    python auto_encoder/evaluate.py
-    ```
 
-### U-Net
-1. Train the U-Net:
-    ```bash
-    python unet/train.py
-    ```
-2. Evaluate the U-Net:
-    ```bash
-    python unet/evaluate.py
-    ```
+### U-Net_v2
 
-## File Structure
-- `auto_encoder/`: Contains scripts and models for the Auto-encoder.
-   - `train.py`: Script for training the Auto-encoder.
-   - `evaluate.py`: Script for evaluating the Auto-encoder.
-   - `models/`: Contains Auto-encoder model definitions.
-   - `data/`: Directory for Auto-encoder input data.
-- `unet/`: Contains scripts and models for the U-Net.
-   - `train.py`: Script for training the U-Net.
-   - `evaluate.py`: Script for evaluating the U-Net.
-   - `models/`: Contains U-Net model definitions.
-   - `data/`: Directory for U-Net input data.
+- **Training**: Use the `train.py` script in `U_Net_v2/scripts/src/`.
+- **Inference**: Use the `inference.py` script in `U_Net_v2/scripts/src/`.
+
+### AutoEncoder
+
+- **Vanilla AutoEncoder**: Refer to the `vanilla_autoencoder` folder.
+- **CNN AutoEncoder**: Refer to the `cnn-autoencoder` folder.
 
 ## License
-This project is licensed under the MIT License.
+
+[Specify license information]
+
+## Acknowledgements
+
+- U-Net architecture: [Ronneberger et al., 2015](https://arxiv.org/abs/1505.04597)
+- [Any other acknowledgements]
