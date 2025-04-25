@@ -1,14 +1,15 @@
 segmentation_fingerprint:
-  image_path: /home/fteam6/m15kh/U_NET/U_Net_v2/data/data_test/test
+  image_path: /home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_images
   image_extention: png
-  mask_path: /home/fteam6/m15kh/U_NET/U_Net_v2/data/data_test/mask_data
+  mask_path: /home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_masks
   mask_extention: png
   is_skeleton: false
   is_ridge_white: false
-  checkpoint_path: checkpoints/extraction/segmentation
+  checkpoint_path: checkpoints/
   experiment_path: results/segmentation_train
-  height: 2400
-  width: 2592
-  batch_size: 1
+  height: 1360
+  width: 1360
+  batch_size: 3
   epochs: 70
   learning_rate: 1e-4
+  val_percent: 0.2

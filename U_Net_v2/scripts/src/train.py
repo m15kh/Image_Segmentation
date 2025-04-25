@@ -19,8 +19,6 @@ class SegmentationTrain(TrainBaseModule):
     def __init__(self,
                   image_path:str, 
                   mask_path:str,
-                  is_skeleton:bool,
-                  is_ridge_white:bool,
                   image_extension:str, 
                   mask_extension:str, 
                   height:int, 
@@ -34,8 +32,6 @@ class SegmentationTrain(TrainBaseModule):
                   pretrain_path: str = None):  # Add pretrain_path parameter
         self.image_path = image_path
         self.mask_path = mask_path
-        self.is_skeleton = is_skeleton
-        self.is_ridge_white = is_ridge_white
         self.image_extension = image_extension
         self.mask_extension = mask_extension
         self.height = height
@@ -92,12 +88,8 @@ class SegmentationTrain(TrainBaseModule):
         valid_x = self.image_list[train_len:]
         valid_y = self.mask_list[train_len:]
 
-        train_dataset = Segmentation_Dataset(train_x, train_y, width=self.width, height=self.height, 
-                                             is_skeleton=self.is_skeleton, 
-                                             is_ridge_white=self.is_ridge_white)
-        valid_dataset = Segmentation_Dataset(valid_x, valid_y, width=self.width, height=self.height, 
-                                             is_skeleton=self.is_skeleton,
-                                             is_ridge_white=self.is_ridge_white)
+        train_dataset = Segmentation_Dataset(train_x, train_y, width=self.width, height=self.height)
+        valid_dataset = Segmentation_Dataset(valid_x, valid_y, width=self.width, height=self.height)
 
         train_loader = DataLoader(dataset=train_dataset, batch_size=self.batch_size, shuffle=True, num_workers=2)
         valid_loader = DataLoader(dataset=valid_dataset, batch_size=self.batch_size, shuffle=False, num_workers=2)
@@ -202,8 +194,6 @@ if __name__ == "__main__":
     train_segmentation = SegmentationTrain(
         image_path=train_params["image_path"],
         mask_path=train_params["mask_path"],
-        is_skeleton=train_params["is_skeleton"],
-        is_ridge_white=train_params["is_ridge_white"],
         image_extension=train_params["image_extention"],
         mask_extension=train_params["mask_extention"],
         height=train_params["height"],
@@ -213,5 +203,6 @@ if __name__ == "__main__":
         lr=train_params["learning_rate"],
         checkpoint_path=train_params["checkpoint_path"],
         experiment_path=train_params["experiment_path"],
-        pretrain_path=train_params.get("pretrain_path", None))  # Pass pretrain_path if available
+        val_percent=train_params.get("validation_ratio", 0.2),  # Use the validation ratio from YAML
+        pretrain_path=train_params.get("pretrain_path", None))
     train_segmentation.train()

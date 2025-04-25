@@ -5,10 +5,13 @@ import numpy as np
 from tqdm import tqdm  # nice progress bar (pip install tqdm if missing)
 
 # Set your folders
-data_folder = '/home/fteam6/m15kh/U_NET/U_Net_v2/data/data_test/test'      # folder containing input images
-mask_folder = '/home/fteam6/m15kh/U_NET/U_Net_v2/data/data_test/mask_data'      # folder containing mask images
-new_data_folder = '/home/fteam6/m15kh/U_NET/U_Net_v2/new_data'
-new_mask_folder = '/home/fteam6/m15kh/U_NET/U_Net_v2/new_maks'
+data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/images'      # folder containing input images
+mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/masks' 
+
+
+# folder containing mask images
+new_data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_images'
+new_mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_masks'
 
 # Create new folders if they don't exist
 os.makedirs(new_data_folder, exist_ok=True)
@@ -37,7 +40,7 @@ for img_name in tqdm(data_images):
     mask_img = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)  # or remove IMREAD_GRAYSCALE if RGB mask
 
     # Extract patches
-    data_patches, indices = emp.extract_patches(data_img, patchsize=1500, overlap=0.1)
+    data_patches, indices = emp.extract_patches(data_img, patchsize=1360, overlap=0.1)
     mask_patches = patch_via_indices(mask_img, indices)
 
     # Save each patch
