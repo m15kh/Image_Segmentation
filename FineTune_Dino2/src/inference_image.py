@@ -10,11 +10,7 @@ from model import prepare_model
 
 # Construct the argument parser.
 parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-i', '--input', 
-    help='path to input dir', 
-    default='/home/ubuntu/m15kh/U_NET/FineTune_DeepLabV3/data'
-)
+parser.add_argument('-i', '--input', help='path to input dir')
 args = parser.parse_args()
 
 out_dir = os.path.join('..', 'outputs', 'inference_results')
@@ -30,23 +26,21 @@ model.eval().to(device)
 
 all_image_paths = os.listdir(args.input)
 for i, image_path in enumerate(all_image_paths):
-    print(f"Processing Image {i+1}: {image_path}")
+    print(f"Image {i+1}")
+    # Read the image.
     image = Image.open(os.path.join(args.input, image_path))
 
+    # Resize very large images (if width > 1024.) to avoid OOM on GPUs.
     if image.size[0] > 1024:
-        image = image.resize((1024, 1024))
-    
-    image = image.convert('RGB')
+        image = image.resize((800, 800))
 
+    # Do forward pass and get the output dictionary.
     outputs = get_segment_labels(image, model, device)
+    # Get the data from the `out` key.
     outputs = outputs['out']
     segmented_image = draw_segmentation_map(outputs)
     
-    # Save the mask
-    mask_path = os.path.join(out_dir, f"mask_{image_path}")
-    cv2.imwrite(mask_path, segmented_image)
-
-    # Save the blended image
     final_image = image_overlay(image, segmented_image)
-    blended_path = os.path.join(out_dir, f"blended_{image_path}")
-    cv2.imwrite(blended_path, final_image)
+    cv2.imshow('Segmented image', final_image)
+    cv2.waitKey(1)
+    cv2.imwrite(os.path.join(out_dir, image_path), final_image)
