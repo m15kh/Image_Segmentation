@@ -50,11 +50,11 @@ if __name__ == '__main__':
     print(f"{total_trainable_params:,} training parameters.")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-    criterion = nn.CrossEntropyLoss() #BUG     # criterion = DiceBCELoss() #BUG 
-
+    # criterion = nn.CrossEntropyLoss() #BUG     # criterion = DiceBCELoss() #BUG 
+    criterion = DiceBCELoss()
 
     train_images, train_masks, valid_images, valid_masks = get_images(
-        root_path='../fingerprint'
+        root_path='/home/ubuntu/m15kh/U_NET/FineTune_DeepLabV3/fingerprint'
         # root_path='/home/ubuntu/m15kh/U_NET/DeepLabV3/Water_Bodies_Dataset_Split'    
     )
 
