@@ -1,9 +1,9 @@
 segmentation_fingerprint:
-  input_dir: /home/ubuntu/m15kh/U_NET/U_Net_v2/output/img_data
+  input_dir: /home/ubuntu/m15kh/U_NET/U_Net_v2/output/a_img_for_inference
   file_extention: png
   checkpoint_path: /home/ubuntu/m15kh/U_NET/U_Net_v2/segmentation_epoch_22_loss_0.223_patch_1360_with_dialte.pth
-  output_path: /home/ubuntu/m15kh/U_NET/U_Net_v2/output/result/
+  output_path: /home/ubuntu/m15kh/U_NET/U_Net_v2/output/result_patch_without_dialte/
   batch_size: 1
   patch_size: 1360
   overlap: 0.1
-  use_empatches: true
+  use_empatches: false

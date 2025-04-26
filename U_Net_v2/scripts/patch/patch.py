@@ -5,13 +5,18 @@ import numpy as np
 from tqdm import tqdm  # nice progress bar (pip install tqdm if missing)
 
 # Set your folders
-data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/images'      # folder containing input images
-mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/masks' 
+# data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/images'      # folder containing input images
+# mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/masks' 
 
+data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/output/test_one_patch'      # folder containing input images
+mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/output/test_one_patch_mask' 
 
 # folder containing mask images
-new_data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_images'
-new_mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_masks'
+# new_data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_images'
+# new_mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/dataset/patch/patch_masks'
+new_data_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/output/test_one_patch'
+new_mask_folder = '/home/ubuntu/m15kh/U_NET/U_Net_v2/output/test_one_patch_mask'
+
 
 # Create new folders if they don't exist
 os.makedirs(new_data_folder, exist_ok=True)

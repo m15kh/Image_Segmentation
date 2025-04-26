@@ -29,8 +29,9 @@ class Segmentation_Dataset(Dataset):
         # Reading and processing the mask
         mask = cv2.imread(self.masks_path[index].as_posix(), cv2.IMREAD_GRAYSCALE) 
         mask = cv2.bitwise_not(mask)
-        kernel = np.ones((5, 5), np.uint8)  # You can adjust the size
-        mask = cv2.erode(mask, kernel, iterations=1)
+        # kernel = np.ones((5, 5), np.uint8)  # You can adjust the size
+        # mask = cv2.erode(mask, kernel, iterations=1)
+
 
         mask = cv2.resize(mask, (self.width, self.height), interpolation=cv2.INTER_NEAREST)
         mask = np.expand_dims(mask, axis=0)  # Add channel dimension to mask: (1, H, W)
