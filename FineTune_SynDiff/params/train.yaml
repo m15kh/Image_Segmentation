@@ -1,11 +1,11 @@
 diffgan:
   image_size: 384
-  input_dir: dataset/diff_gan_crack/images
-  output_dir: dataset/diff_gan_crack_output
+  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/Dataset
+  output_dir: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/output
   batch_size: 2
   num_epochs: 40
   save_ckpt_every: 1          #How frequently save checkpoints
-  image_extentions: jpg
+  image_extentions: png
   mask_extentions: png
   mpoint_extentions: mnt      #choices = [npy, mnt]
   num_proc_node: 1
