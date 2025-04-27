@@ -24,9 +24,9 @@ import sys
 from pathlib import Path
 ROOT_DIR = Path(__file__).parents[3].as_posix()
 sys.path.append(ROOT_DIR)
-from models.DiffGAN.backbones import layers
-from models.DiffGAN.backbones import dense_layer
-from models.DiffGAN.backbones import up_or_down_sampling
+from models.backbones import layers
+from models.backbones import dense_layer
+from models.backbones import up_or_down_sampling
 import torch.nn as nn
 import torch
 import torch.nn.functional as F

@@ -26,17 +26,17 @@ import torch.distributed as dist
 import torchvision.transforms as transforms
 from torch.multiprocessing import Process
 
-from belong_mobile.models.DiffGAN.utils.EMA import EMA
-from belong_mobile.models.DiffGAN.modules import TrainBaseModule
-from belong_mobile.models.DiffGAN.utils import utils_train
-from belong_mobile.models.DiffGAN.utils import  config 
-from belong_mobile.models.DiffGAN.utils.convert_to_patches import CreateDataset
-from belong_mobile.models.DiffGAN.utils.loss import connect_loss, convert_to_one_channel
-from belong_mobile.models.DiffGAN.backbones.ncsnpp_generator_adagn import NCSNpp
-from belong_mobile.models.DiffGAN.datareader import DataLoaderTrain, DataLoaderTest
-from belong_mobile.models.DiffGAN.backbones.discriminator import Discriminator_large
-from belong_mobile.models.DiffGAN.utils.posterior_coefficients import Posterior_Coefficients,Diffusion_Coefficients
-from belong_mobile.models.DiffGAN.utils.Patching_Dataset import Patching_Dataset
+from scripts.models.utils.EMA import EMA
+from scripts.models.modules import TrainBaseModule
+from scripts.models.utils import utils_train
+from scripts.models.utils import  config 
+from scripts.models.utils.convert_to_patches import CreateDataset
+from scripts.models.utils.loss import connect_loss, convert_to_one_channel
+from scripts.models.backbones.ncsnpp_generator_adagn import NCSNpp
+from scripts.models.datareader import DataLoaderTrain, DataLoaderTest
+from scripts.models.backbones.discriminator import Discriminator_large
+from scripts.models.utils.posterior_coefficients import Posterior_Coefficients,Diffusion_Coefficients
+from scripts.models.utils.Patching_Dataset import Patching_Dataset
 
 
 conf = config.ConfigTrain()

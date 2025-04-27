@@ -16,7 +16,7 @@ from torch.utils.data import DataLoader
 
 
 
-from belong_mobile.models.DiffGAN.utils.Patching_Dataset import Patching_Dataset
+from scripts.models.utils.Patching_Dataset import Patching_Dataset
 
 class CreateDataset:
 

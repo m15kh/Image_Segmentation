@@ -29,7 +29,7 @@ if __name__ == '__main__':
         for rank in range(size):
             ehancer_train.config.local_rank = rank
             global_rank = rank + ehancer_train.config.node_rank * ehancer_train.num_process_per_node
-            global_size = ehancer_train.num_proc_node * ehancer_train.num_process_per_node
+            global_size = ehancer_train.num_prclsoc_node * ehancer_train.num_process_per_node
             ehancer_train.global_rank = global_rank
             print('Node rank %d, local proc %d, global proc %d' % (ehancer_train.config.node_rank, rank, global_rank))
             p = Process(target=ehancer_train.init_processes, args=(global_rank, global_size, ehancer_train.train, ehancer_train.config))
