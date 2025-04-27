@@ -92,7 +92,7 @@ if __name__ == '__main__':
     criterion = nn.CrossEntropyLoss()
 
     train_images, train_masks, valid_images, valid_masks = get_images(
-        root_path='input/PennFudanPed'    
+        root_path='/home/ubuntu/m15kh/U_NET/FineTune_DeepLabV3/fingerprint'
     )
 
     train_dataset, valid_dataset = get_dataset(

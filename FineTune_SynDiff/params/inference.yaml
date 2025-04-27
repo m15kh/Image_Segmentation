@@ -1,0 +1,9 @@
+diffgan:
+  input_dir: dataset/test_crack
+  file_extention: jpg
+  output_path: dataset/test_crack_output
+  checkpoint_path: dataset/diff_gan_crack_output/gen_diffusive_1_17.pth
+  step: 100
+  device: gpu
+  batch_size: 2
+

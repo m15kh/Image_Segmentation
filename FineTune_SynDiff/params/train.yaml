@@ -1,0 +1,18 @@
+diffgan:
+  image_size: 384
+  input_dir: dataset/diff_gan_crack/images
+  output_dir: dataset/diff_gan_crack_output
+  batch_size: 2
+  num_epochs: 40
+  save_ckpt_every: 1          #How frequently save checkpoints
+  image_extentions: jpg
+  mask_extentions: png
+  mpoint_extentions: mnt      #choices = [npy, mnt]
+  num_proc_node: 1
+  num_process_per_node: 1     #Number of GPUs 
+  full_image_train: False  #Whether you want to train the model in full-image input mode or patch-wise input mode
+                              #please also change the image_size parameter to a higher number when using full-image training mode.
+  crop_input: False      #Set this True when you want train full-image and you want to crop the input image based on the mask to avoid noise.
+  use_mpoints: False         #Set True if you want to use Mpoints during training.  
+  background_color_of_mask: 1 #["White : 0, Black : 1"]
+  fingerprint_type: visible #visible       #[visible or latent]
