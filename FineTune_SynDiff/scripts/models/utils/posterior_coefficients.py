@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from belong_mobile.models.DiffGAN.utils.utils_train import get_sigma_schedule
+from scripts.models.utils.utils_train import get_sigma_schedule
 
 class Diffusion_Coefficients():
     def __init__(self, args, device):

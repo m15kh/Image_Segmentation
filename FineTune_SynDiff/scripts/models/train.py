@@ -459,7 +459,7 @@ class EnhancerTrain(TrainBaseModule):
 
 #%%
 if __name__ == '__main__':    
-    params = yaml.safe_load(open('params/diff_gan_train.yaml'))["diffgan"]
+    params = yaml.safe_load(open('params/train.yaml'))["diffgan"]
     size = params["num_process_per_node"]
     ehancer_train = EnhancerTrain(image_size       = params["image_size"]               ,input_dir            = params["input_dir"],
                                   output_dir       = params["output_dir"]               ,mask_extentions      = params["mask_extentions"],

@@ -15,7 +15,7 @@ import torch.nn as nn
 import torch
 import torch.nn.functional as F
 import numpy as np
-from models.DiffGAN.utils.op.upfirdn2d import upfirdn2d
+from scripts.models.utils.op.upfirdn2d import upfirdn2d
 
 
 
