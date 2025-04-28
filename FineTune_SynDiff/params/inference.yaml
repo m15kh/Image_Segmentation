@@ -1,8 +1,8 @@
 diffgan:
-  input_dir: dataset/test_crack
-  file_extention: jpg
-  output_path: dataset/test_crack_output
-  checkpoint_path: dataset/diff_gan_crack_output/gen_diffusive_1_17.pth
+  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/inference_test
+  file_extention: png
+  output_path: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/output/results_inference
+  checkpoint_path: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/output/gen_diffusive_1_9.pth
   step: 100
   device: gpu
   batch_size: 2

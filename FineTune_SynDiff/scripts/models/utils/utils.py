@@ -8,7 +8,7 @@ from torch.utils.data.dataset import Dataset
 import numpy as np
 from PIL import Image
 import torchvision.transforms as transforms
-from belong_mobile.models.DiffGAN.utils.loss import convert_to_one_channel
+from scripts.models.utils.loss import convert_to_one_channel
 
 def extract(input, t, shape):
     out = torch.gather(input, 0, t)
