@@ -1,9 +1,9 @@
 diffgan:
   image_size: 384
-  input_dir: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/Finger_Data/Dataset/images
-  output_dir: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/Finger_Data/Dataset/masks
-  batch_size: 2
-  num_epochs: 40
+  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/Dataset/images
+  output_dir: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/output
+  batch_size: 4
+  num_epochs: 10
   save_ckpt_every: 1          #How frequently save checkpoints
   image_extentions: png
   mask_extentions: png

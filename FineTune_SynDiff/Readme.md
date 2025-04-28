@@ -14,13 +14,24 @@ The goal of this project is to fine-tune the SynDiff model for specific image se
 
 ## Getting Started
 
-1. Clone the repository:
+1. Update system packages and install build dependencies:
+    ```bash
+    sudo apt update
+    sudo apt install ninja-build
+    ```
+
+2. Clone the repository:
     ```bash
     git clone https://github.com/icon-lab/SynDiff.git
     cd SynDiff
     ```
 
-2. Follow the instructions in this repository to set up the fine-tuning process.
+3. Install Python requirements:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. Follow the instructions in this repository to set up the fine-tuning process.
 
 ## References
 
