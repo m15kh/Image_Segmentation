@@ -36,8 +36,6 @@ class InferenceEnhancer(InferenceBaseModule):
         self.padding_color = checkpoint_file["padding_color"]
         self.full_image = checkpoint_file["full_image"]
         self.state_dict = checkpoint_file["state_dict"]
-        self.fingerprint_type = checkpoint_file["fingerprint_type"]
-        print(f"ATTENTION: FINGERPRINT TYPE IS ----- {self.fingerprint_type} -----")
         self.config = conf.config
         self.config.image_size = self.image_size
         
@@ -439,8 +437,6 @@ class InferenceEnhancer(InferenceBaseModule):
             for img_name, pred in zip(batch_name, batch_preds):
                 output_file_path = os.path.join(output_path, img_name+".png")
                 _, img = cv2.threshold(pred, 200, 255, cv2.THRESH_BINARY)
-                if self.fingerprint_type == "latent":
-                    img = cv2.bitwise_not(img)
                 cv2.imwrite(output_file_path, img)
 
 
