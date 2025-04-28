@@ -14,7 +14,7 @@ from loss import DiceBCELoss
 parser = argparse.ArgumentParser()
 parser.add_argument(
     '--epochs',
-    default=50,
+    default=40,
     help='number of epochs to train for',
     type=int
 )
@@ -26,7 +26,7 @@ parser.add_argument(
 )
 parser.add_argument(
     '--batch',
-    default=4,
+    default=10,
     help='batch size for data loader',
     type=int
 )
@@ -54,8 +54,7 @@ if __name__ == '__main__':
     criterion = DiceBCELoss()
 
     train_images, train_masks, valid_images, valid_masks = get_images(
-        root_path='/home/ubuntu/m15kh/U_NET/FineTune_DeepLabV3/fingerprint'
-        # root_path='/home/ubuntu/m15kh/U_NET/DeepLabV3/Water_Bodies_Dataset_Split'    
+        root_path='/home/ubuntu2/m15kh/firm/Image_Segmentation/Finger_Data/Data_split'
     )
 
     classes_to_train = ALL_CLASSES
