@@ -87,7 +87,7 @@ class SegmentationDataset(Dataset):
         image = np.array(Image.open(self.image_paths[index]).convert('RGB'))
         mask = np.array(Image.open(self.mask_paths[index]).convert('RGB'))
 
-        mask = cv2.bitwise_not(mask) #betwise
+        # mask = cv2.bitwise_not(mask) #betwise 
         # Make any pixel value above 200 as 255 for waterbody.
         im = mask >= 200
         mask[im] = 255

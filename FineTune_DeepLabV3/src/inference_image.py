@@ -13,7 +13,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '-i', '--input', 
     help='path to input dir', 
-    default='/home/ubuntu/m15kh/U_NET/FineTune_DeepLabV3/data'
+    default='/home/ubuntu2/m15kh/firm/Image_Segmentation/Finger_Data/inference_test'
 )
 args = parser.parse_args()
 
