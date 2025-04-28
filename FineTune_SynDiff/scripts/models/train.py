@@ -47,7 +47,6 @@ class EnhancerTrain(TrainBaseModule):
                  input_dir:str, 
                  image_extentions:str,
                  mask_extentions: str,
-                 mpoint_extentions: str,
                  output_dir:str,
                  image_size: int, 
                  batch_size:int,
@@ -58,15 +57,12 @@ class EnhancerTrain(TrainBaseModule):
                  num_proc_node:int=1, 
                  num_process_per_node:int=1,                  
                  full_image_train:bool=False, 
-                 use_mpoints:bool = True,
-                 padding_color:int=255,
-                 fingerprint_type:str='latent',):
+                 padding_color:int=255):
         
         self.image_size             = image_size
         self.input_dir              = input_dir
         self.image_extention        = image_extentions
         self.mask_extention         = mask_extentions
-        self.mpoint_extention       = mpoint_extentions
         self.output_dir             = output_dir
         self.output_dir             = self.output_dir
         self.batch_size             = batch_size
@@ -80,7 +76,6 @@ class EnhancerTrain(TrainBaseModule):
         self.config                 = conf.config 
         self.config.image_size      = self.image_size
         self.world_size             = self.num_proc_node * self.num_process_per_node
-        self.use_mpoints            = use_mpoints
         self.background_color_of_mask = background_color_of_mask
         self.padding_color          = padding_color
 
@@ -91,10 +86,6 @@ class EnhancerTrain(TrainBaseModule):
         assert len(images_path) > 0, f"No image file found in directory {self.input_dir} with extention {self.image_extention}, please check image file extention and folder directory in params/params_train.yaml"
         print(f"{len(images_path)} images are found in {self.input_dir}")
 
-        if fingerprint_type not in ["latent", "visible"]:
-            raise ValueError(f"Fingerprint type should be 'latent' or 'visible', but got {fingerprint_type}.")
-        self.fingerprint_type = fingerprint_type
-
         
         if os.path.isdir("enahancer_training_data_temp"):
             shutil.rmtree("enahancer_training_data_temp")
@@ -103,8 +94,8 @@ class EnhancerTrain(TrainBaseModule):
         orientation_extractor = None
         #Create Dataset 
         create_dataset = CreateDataset(images_path, orientation_extractor, 
-                                       use_mpoints = self.use_mpoints, image_size = self.image_size,
-                                       image_extention = self.image_extention,mpoint_extention = self.mpoint_extention, 
+                                       image_size = self.image_size,
+                                       image_extention = self.image_extention, 
                                        mask_extention = self.mask_extention, bg_mask_color = self.background_color_of_mask)
         create_dataset.save_patches(is_csv = self.input_dir.endswith(".csv")) if not self.full_image_train else create_dataset.save_full_image(is_csv = self.input_dir.endswith(".csv"))
         
@@ -124,9 +115,9 @@ class EnhancerTrain(TrainBaseModule):
     def __train_val_test_dataloader(self, rank):         
                           
         dataset = DataLoaderTrain(root = "enahancer_training_data_temp/images", image_extentions=".png", image_size = self.image_size, 
-                                  transform=self.train_transform, transform_mask = self.fm_transform, crop_image = self.crop_input, use_minutiae = self.use_mpoints)
+                                  transform=self.train_transform, transform_mask = self.fm_transform, crop_image = self.crop_input)
         dataset_val = DataLoaderTest(root  = "enahancer_training_data_temp/images", image_extentions=".png", image_size = self.image_size,
-                                      transform=self.train_transform, transform_mask = self.fm_transform, crop_image = self.crop_input, use_minutiae = self.use_mpoints)
+                                      transform=self.train_transform, transform_mask = self.fm_transform, crop_image = self.crop_input)
         
         self.train_sampler = torch.utils.data.distributed.DistributedSampler(dataset,num_replicas=self.world_size,rank=rank)
         self.data_loader = torch.utils.data.DataLoader(dataset,
@@ -153,12 +144,9 @@ class EnhancerTrain(TrainBaseModule):
 
         
                                                                      
-    def __train_one_step(self, epoch, iteration, image, mask): #mpoint_mask
+    def __train_one_step(self, epoch, iteration, image, mask): 
         mask        = (mask > 0) * 1.0
-        # if self.use_mpoints:
-        #     mpoint_mask = (mpoint_mask > 0) * 1.0
-        # orientation = (orientation > 0) * 1.0
-        
+
         #Train With Real 
         for p in self.disc_diffusive_1.parameters():  
             p.requires_grad = True       
@@ -167,8 +155,7 @@ class EnhancerTrain(TrainBaseModule):
         # @Borhan: real_data1 => real_image && real_data2 => real_mask
         real_image        = image.to(self.DEVICE, non_blocking=True)
         real_mask         = mask.to(self.DEVICE, non_blocking=True)
-        # if self.use_mpoints:
-        #     real_mpoint_mask  = mpoint_mask.to(self.DEVICE, non_blocking=True)
+
         # real_orientation  = orientation.to(self.DEVICE, non_blocking=True)   
         
         # @Borhan: t1 and t2 must be reversed if you want to follow the syndiff strictly
@@ -184,8 +171,7 @@ class EnhancerTrain(TrainBaseModule):
         # rm1_t_with_ori   = torch.cat((rm1_t, real_orientation), axis = 1)
         # rm1_tp1_with_ori = torch.cat((rm1_tp1, real_orientation), axis = 1)
         # rm1_t_with_ori.requires_grad = True
-        print(f"rm1_t shape: {rm1_t.shape}, rm1_tp1 shape: {rm1_tp1.shape}")
-        print(f"x2_t shape: {x2_t.shape}, x2_tp1 shape: {x2_tp1.shape}")    
+   
         D1_real = self.disc_diffusive_1(rm1_t, t1, rm1_tp1.detach()).view(-1)
         # D2_real = self.disc_diffusive_1(x2_t, t2, x2_tp1.detach()).view(-1)
     
@@ -269,11 +255,8 @@ class EnhancerTrain(TrainBaseModule):
         errG1_seg     = self.bicon_loss(rm1_0_predict_diff, real_mask.float())
         errG1_seg_aux = self.bicon_loss(rm1_0_predict_diff_aux, real_mask.float())
 
-        #Add Minutiae Loss
-        # if self.use_mpoints:
-        #     errG1_seg_minutiae = self.segmentation_loss((rm1_0_predict_diff_mask * real_mpoint_mask), (real_mask * real_mpoint_mask))
-            
-        errG_L1 =  errG1_seg + 0.3 * errG1_seg_aux if self.use_mpoints else errG1_seg + 0.3 * errG1_seg_aux                                          
+          
+        errG_L1 =  errG1_seg + 0.3 * errG1_seg_aux                                          
         torch.autograd.set_detect_anomaly(True)
         
         errG = 1 * errG_L1 + errG_adv
@@ -282,15 +265,11 @@ class EnhancerTrain(TrainBaseModule):
         self.optimizer_gen_diffusive_1.step()
         self.global_step += 1
 
-        # self.errG1_seg_minutiae = errG1_seg_minutiae if self.use_mpoints else "N/A"
         self.errG_L1            = errG_L1
         self.errG_adv           = errG_adv
         self.errG               = errG
         self.errD               = errD
-        # if self.use_mpoints:
-        #     print('epoch {} iteration{}, G1-Minutiae : {}, G-L1: {}, G-Adv : {},  G-Sum: {}, D Loss: {}'.format(epoch,iteration, errG1_seg_minutiae.item(), errG_L1.item(), errG_adv.item(), errG.item(), errD.item()))
-        # else:
-        #     print('epoch {} iteration{}, G-L1: {}, G-Adv : {},  G-Sum: {}, D Loss: {}'.format(epoch,iteration, errG_L1.item(), errG_adv.item(), errG.item(), errD.item()))
+
         if iteration % 10 == 0:  
             rm1_t = torch.cat((torch.randn_like(real_mask),real_image),axis=1)
             fake_masks = self.sample_from_model(rm1_t)   
@@ -298,8 +277,6 @@ class EnhancerTrain(TrainBaseModule):
             # Normalize images except the binary mask
             real_image_norm = (real_image - real_image.min()) / (real_image.max() - real_image.min())
             real_mask_norm = (real_mask - real_mask.min()) / (real_mask.max() - real_mask.min())
-            # real_mpoint_mask_norm = (real_mpoint_mask - real_mpoint_mask.min()) / (real_mpoint_mask.max() - real_mpoint_mask.min())
-            # real_orientation_norm = (real_orientation - real_orientation.min()) / (real_orientation.max() - real_orientation.min())
 
             # Ensure fake_masks is a float tensor with values in [0, 1]
             # fake_masks = fake_masks.float()
@@ -308,8 +285,6 @@ class EnhancerTrain(TrainBaseModule):
             fake_sample2 = torch.cat((
                 real_image_norm,
                 real_mask_norm,
-                # real_mpoint_mask_norm,
-                # real_orientation_norm,
                 fake_masks
             ), axis=-1)
 
@@ -318,29 +293,17 @@ class EnhancerTrain(TrainBaseModule):
                                         
     def __train_one_epoch(self, epoch):
         self.train_sampler.set_epoch(epoch)
-        with tqdm.tqdm(total=len(self.data_loader), desc=f"Epoch {epoch+1}/{self.num_epochs}", unit="Batch") as pbar:
-            if self.use_mpoints:
-                for iteration, (image, mask) in enumerate(self.data_loader): #mpoint_mask
-                    self.__train_one_step(epoch, iteration, image, mask) #mpoint_mask
-                    pbar.set_postfix({
-                        'G1-Minutiae': f'{self.errG1_seg_minutiae.item():.4f}',
-                        'G-L1': f'{self.errG_L1.item():.4f}',
-                        'G-Adv': f'{self.errG_adv.item():.4f}',
-                        'G-Sum': f'{self.errG.item():.4f}',
-                        'D Loss': f'{self.errD.item():.4f}'
-                    })
-                    pbar.update(1)                    
+        with tqdm.tqdm(total=len(self.data_loader), desc=f"Epoch {epoch+1}/{self.num_epochs}", unit="Batch") as pbar:                 
                     
-            else:
-                for iteration, (image, mask) in enumerate(self.data_loader): #mpoint_mask
-                    self.__train_one_step(epoch, iteration, image, mask) #mpoint_mask
-                    pbar.set_postfix({
-                        'G-L1': f'{self.errG_L1.item():.4f}',
-                        'G-Adv': f'{self.errG_adv.item():.4f}',
-                        'G-Sum': f'{self.errG.item():.4f}',
-                        'D Loss': f'{self.errD.item():.4f}'
-                    })
-                    pbar.update(1)                    
+            for iteration, (image, mask) in enumerate(self.data_loader): 
+                self.__train_one_step(epoch, iteration, image, mask)
+                pbar.set_postfix({
+                    'G-L1': f'{self.errG_L1.item():.4f}',
+                    'G-Adv': f'{self.errG_adv.item():.4f}',
+                    'G-Sum': f'{self.errG.item():.4f}',
+                    'D Loss': f'{self.errD.item():.4f}'
+                })
+                pbar.update(1)                    
                         
         if not self.config.no_lr_decay:            
             self.scheduler_gen_diffusive_1.step()            
@@ -354,7 +317,6 @@ class EnhancerTrain(TrainBaseModule):
                 'padding_color': self.padding_color,  
                 'image_size': self.image_size,
                 'state_dict': self.gen_diffusive_1.state_dict(),
-                'fingerprint_type': self.fingerprint_type
             }
 
             torch.save(checkpoint_gen, os.path.join(self.output_dir, 'gen_diffusive_1_{}.pth'.format(epoch)))
@@ -459,7 +421,7 @@ class EnhancerTrain(TrainBaseModule):
 
 #%%
 if __name__ == '__main__':    
-    params = yaml.safe_load(open('params/train.yaml'))["diffgan"]
+    params = yaml.safe_load(open('params/diff_gan_train.yaml'))["diffgan"]
     size = params["num_process_per_node"]
     ehancer_train = EnhancerTrain(image_size       = params["image_size"]               ,input_dir            = params["input_dir"],
                                   output_dir       = params["output_dir"]               ,mask_extentions      = params["mask_extentions"],
@@ -467,8 +429,8 @@ if __name__ == '__main__':
                                   save_ckpt_every  = params["save_ckpt_every"]          ,num_proc_node        = params["num_proc_node"],
                                   num_process_per_node = params["num_process_per_node"] ,full_image_train     = params["full_image_train"],
                                   image_extentions = params["image_extentions"]         ,crop_input           = params["crop_input"],
-                                  use_mpoints      = params["use_mpoints"]              ,fingerprint_type     = params["fingerprint_type"],
-                                  mpoint_extentions = params["mpoint_extentions"]    ,background_color_of_mask = params["background_color_of_mask"])
+                                  background_color_of_mask = params["background_color_of_mask"])
+                                      
                                   
     
     if size > 1:
@@ -488,4 +450,3 @@ if __name__ == '__main__':
 
     else:
         ehancer_train.init_processes(0, size, ehancer_train.train, ehancer_train.config)
-

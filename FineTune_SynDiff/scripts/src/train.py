@@ -11,6 +11,8 @@ import yaml
 from scripts.models.train import EnhancerTrain
 from scripts.models.train import Process
 
+
+
 if __name__ == '__main__':    
     params = yaml.safe_load(open('params/train.yaml'))["diffgan"]
     size = params["num_process_per_node"]
@@ -20,16 +22,14 @@ if __name__ == '__main__':
                                   save_ckpt_every  = params["save_ckpt_every"]          ,num_proc_node        = params["num_proc_node"],
                                   num_process_per_node = params["num_process_per_node"] ,full_image_train     = params["full_image_train"],
                                   image_extentions = params["image_extentions"]         ,crop_input           = params["crop_input"],
-                                  use_mpoints      = params["use_mpoints"]              ,fingerprint_type     = params["fingerprint_type"],
-                                  mpoint_extentions = params["mpoint_extentions"]    ,background_color_of_mask = params["background_color_of_mask"])
-                                  
-    
+                                  background_color_of_mask = params["background_color_of_mask"])
+                                      
     if size > 1:
         processes = []
         for rank in range(size):
             ehancer_train.config.local_rank = rank
             global_rank = rank + ehancer_train.config.node_rank * ehancer_train.num_process_per_node
-            global_size = ehancer_train.num_prclsoc_node * ehancer_train.num_process_per_node
+            global_size = ehancer_train.num_proc_node * ehancer_train.num_process_per_node
             ehancer_train.global_rank = global_rank
             print('Node rank %d, local proc %d, global proc %d' % (ehancer_train.config.node_rank, rank, global_rank))
             p = Process(target=ehancer_train.init_processes, args=(global_rank, global_size, ehancer_train.train, ehancer_train.config))
@@ -41,4 +41,3 @@ if __name__ == '__main__':
 
     else:
         ehancer_train.init_processes(0, size, ehancer_train.train, ehancer_train.config)
-

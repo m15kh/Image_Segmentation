@@ -20,14 +20,12 @@ from scripts.models.utils.Patching_Dataset import Patching_Dataset
 
 class CreateDataset:
 
-    def __init__(self, images_path, orientation_extractor, use_mpoints, image_size,
-                  mpoint_extention, mask_extention, image_extention,
+    def __init__(self, images_path, orientation_extractor, image_size,
+                  mask_extention, image_extention,
                   bg_mask_color):
         self.images_path           = images_path
         # self.orientation_extractor = orientation_extractor
-        self.use_mpoints           = use_mpoints               
         self.size                  = image_size 
-        self.mpoint_extention      = mpoint_extention.replace(".", "")
         self.mask_extention        = mask_extention.replace(".", "")
         self.image_extention       = image_extention.replace(".", "") 
         self.bg_mask_color         = bg_mask_color               
@@ -35,8 +33,6 @@ class CreateDataset:
         os.makedirs("enahancer_training_data_temp/masks", exist_ok=True)
         os.makedirs("enahancer_training_data_temp/orientations", exist_ok=True)
 
-        if self.use_mpoints:
-            os.makedirs("enahancer_training_data_temp/mpoints", exist_ok=True)
 
         
 
@@ -83,12 +79,7 @@ class CreateDataset:
                 mask_tensor = mask.crop((left, upper, left + patch_size, upper + patch_size))
                 mask_tensor = mask_tensor.convert("L")
                 mask_patches.append(mask_tensor)            
-
-                # Extract the mpoint-mask patch
-                if mnt != None:
-                    mnt_tensor = mnt.crop((left, upper, left + patch_size, upper + patch_size))
-                    mnt_tensor = mnt_tensor.convert("L")
-                    mnt_patches.append(mnt_tensor)          
+        
 
                 # Extract the orientation patch
                 orientations_tensor = orientations.crop((left, upper, left + patch_size, upper + patch_size))
@@ -99,22 +90,6 @@ class CreateDataset:
             return image_patches, mask_patches, mnt_patches, orientations_patches
         else:
             return image_patches, mask_patches, orientations_patches
-
-    def create_mnt(self, path, mask_shape, radius=12, color=255, thickness=-1):
-        if self.mpoint_extention == "npy":
-            mnts = np.load(path)
-            black_mask = np.zeros(mask_shape, dtype=np.uint8)
-            x_coords, y_coords = mnts[:, 0].astype(int), mnts[:, 1].astype(int)
-            for x, y in zip(x_coords, y_coords):
-                cv2.circle(black_mask, (x, y), radius, color, thickness)
-        if self.mpoint_extention == "mnt":
-            df = pd.read_csv(path)            
-            black_mask = np.zeros(mask_shape, dtype=np.uint8)
-            x_coords = df["x"].tolist()
-            y_coords = df["y"].tolist()
-            for x, y in zip(x_coords, y_coords):
-                cv2.circle(black_mask, (int(x), int(y)), radius, color, thickness)            
-        return black_mask
 
     def pad_to_min_size(self, img, size):
 
@@ -209,15 +184,7 @@ class CreateDataset:
                     #                                                             , draw_on_white_image = True)
                     # orientations = Image.fromarray(orientations.astype(np.uint8)).convert("L")
                     # orientations_patcher  = Patching_Dataset(np.array(orientations), self.size, self.size, step)
-                #Read MNTs
-                if self.use_mpoints:                                        
-                    mnt_path = os.path.join(Path(mask_path).parents[1].as_posix(), "mpoints", Path(mask_path).stem + f".{self.mpoint_extention}")   
-                    assert os.path.isfile(mnt_path), f"No mpoint file found in directory {mnt_path}, please check mpoint file extention and folder directory in params/params_train.yaml"                 
-                    mnt_mask = self.create_mnt(mnt_path, mask.size)
-                    mnt_mask = Image.fromarray(mnt_mask)
-                    _, _, mnt_mask  = self.pad_to_min_size(mnt_mask, self.size)
-                    mnt_patcher  = Patching_Dataset(np.array(mnt_mask), self.size, self.size, step)
-                    mnt_patches = DataLoader(mnt_patcher, batch_size=1, shuffle=False, num_workers=0, drop_last=False, pin_memory=True)
+
                 #Save patches
                 image_patches = DataLoader(image_patcher, batch_size=1, shuffle=False, num_workers=0, drop_last=False, pin_memory=True)
                 mask_patches  = DataLoader(mask_patcher, batch_size=1, shuffle=False, num_workers=0, drop_last=False, pin_memory=True)
@@ -225,12 +192,8 @@ class CreateDataset:
         
                 save_path_image = f"enahancer_training_data_temp/images/{i:06d}.png"
                 save_path_mask  = f"enahancer_training_data_temp/masks/{i:06d}.png"
-                save_path_oris  = f"enahancer_training_data_temp/orientations/{i:06d}.png"
-                if self.use_mpoints:
-                    save_path_mnts  = f"enahancer_training_data_temp/mpoints/{i:06d}.png"                
+                save_path_oris  = f"enahancer_training_data_temp/orientations/{i:06d}.png"               
                 
-                # if self.use_mpoints:
-                #     assert len(image_patches) == len(mask_patches) == len(mnt_patches) == len(ori_patches), "All extracted patches must have same length"
 
                 assert len(image_patches) == len(mask_patches), "All extracted patches must have same length"
                     # assert len(image_patches) == len(mask_patches) == len(ori_patches), "All extracted patches must have same length"
@@ -254,23 +217,7 @@ class CreateDataset:
                         patch = patch.cpu().detach().numpy().squeeze(0)
                         patch = Image.fromarray(np.uint8(patch))
                         patch.save(save_path_mask.replace(".png", "_patch_{}.png".format(step)))
-                    
-                # #Save Ori
-                # for step, (patch_ind, patch) in enumerate(ori_patches):
-                #     if blank_mask_index[step] == 0:
-                #         patch = patch.cpu().detach().numpy().squeeze(0)
-                #         patch = Image.fromarray(np.uint8(patch))
-                #         patch.save(save_path_oris.replace(".png", "_patch_{}.png".format(step)))
-                    
-                # #Save MNTs
-                # if self.use_mpoints:
-                #     for step, (patch_ind, patch) in enumerate(mnt_patches):
-                #         if blank_mask_index[step] == 0:
-                #             patch = patch.cpu().detach().numpy().squeeze(0)
-                #             patch = Image.fromarray(np.uint8(patch))
-                #             patch.save(save_path_mnts.replace(".png", "_patch_{}.png".format(step)))   
                         
-                
                 i += 1                                                                
                 
           
@@ -301,26 +248,9 @@ class CreateDataset:
             if self.bg_mask_color == 0:
                 mask = Image.eval(mask, lambda x: 255 - x)
 
-            # Load or generate orientation field
-            if os.path.isfile(orient_path):
-                orientations = Image.open(orient_path).resize(target_size)
-            else:
-                segmentation_mask = self.enhanced_image_cleaner(np.array(mask))
-                orientations = self.orientation_extractor.inference(np.array(image.convert('L')), segmentation_mask)
-                orientations = self.orientation_extractor.draw_orientations(np.array(image), orientations, segmentation_mask, draw_on_white_image=True)
-                orientations = Image.fromarray(orientations.astype(np.uint8)).resize(target_size)
 
-            # Process and resize minutiae points if used
-            if self.use_mpoints:
-                mnt_path = mask_path.replace("masks", "mpoints").replace(".png", f".{self.mpoint_extention}")
-                if is_csv:
-                    mnt_path = mnt_path.replace(".png", "_minutiapoints.npy")
-                mnt_mask = self.create_mnt(mnt_path, mask.size)
-                mnt_mask = Image.fromarray(mnt_mask).resize(target_size)
-                save_image(mnt_mask, "mpoints", i)
+            segmentation_mask = self.enhanced_image_cleaner(np.array(mask))
 
             # Save resized images, masks, and orientation fields
             save_image(image, "images", i)
             save_image(mask, "masks", i)
-            save_image(orientations, "orientations", i)
-
