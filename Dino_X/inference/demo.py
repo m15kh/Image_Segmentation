@@ -16,7 +16,7 @@ import json
 """
 Hyper Parameters
 """
-API_TOKEN = "f48aea1d1ad9cf8283ce6caecbea8b42"
+API_TOKEN = "API"
 IMG_PATH = "/home/ubuntu/m15kh/own/proj/Generator/img_tst/tst2.png"
 TEXT_PROMPT =  "person"
 
