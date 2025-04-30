@@ -86,6 +86,8 @@ class SegmentationDataset(Dataset):
     def __getitem__(self, index):
         image = np.array(Image.open(self.image_paths[index]).convert('RGB'))
         mask = np.array(Image.open(self.mask_paths[index]).convert('RGB'))
+        kernel = np.ones((3, 3), np.uint8)  # You can adjust the size
+        mask = cv2.erode(mask, kernel, iterations=1)
 
         # mask = cv2.bitwise_not(mask) #betwise 
         # Make any pixel value above 200 as 255 for waterbody.
@@ -93,8 +95,12 @@ class SegmentationDataset(Dataset):
         mask[im] = 255
         mask[np.logical_not(im)] = 0
 
+        #add erode filter
+
+
         image = self.norm_tfms(image=image)['image']
-        transformed = self.tfms(image=image, mask=mask)
+        transformed = self.tfms(image=image, mask=mask) 
+        
         image = transformed['image']
         mask = transformed['mask']
         

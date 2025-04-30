@@ -54,7 +54,7 @@ if __name__ == '__main__':
     criterion = DiceBCELoss()
 
     train_images, train_masks, valid_images, valid_masks = get_images(
-        root_path='/home/ubuntu2/m15kh/firm/Image_Segmentation/Finger_Data/Data_split'
+        root_path='/home/ubuntu/m15kh/Image_Segmentation/Finger_Data/Data_split'
     )
 
     classes_to_train = ALL_CLASSES
