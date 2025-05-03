@@ -14,11 +14,11 @@ parser = argparse.ArgumentParser()
 parser.add_argument(
     '-i', '--input', 
     help='path to input dir', 
-    default='/home/ubuntu/m15kh/Image_Segmentation/Finger_Data/inference_test'
+    default='/home/ubuntu/m15kh/Image_Segmentation/Validation/Images'
 )
 args = parser.parse_args()
 
-out_dir = os.path.join('/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3', 'outputs', 'inference_results')
+out_dir = os.path.join('/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3', 'outputs_validation', 'inference_results_validation')
 os.makedirs(out_dir, exist_ok=True)
 
 # Set computation device.
@@ -55,7 +55,7 @@ for i, image_path in enumerate(all_image_paths):
     print(f"Inference Time for Image {i+1}: {inference_time:.4f} seconds")
     
     # Save the mask
-    mask_path = os.path.join(out_dir, f"mask_{image_path}")
+    mask_path = os.path.join(out_dir, f"{image_path}")
     cv2.imwrite(mask_path, segmented_image)
 
     # Save the blended image

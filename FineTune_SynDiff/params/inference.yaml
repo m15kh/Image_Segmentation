@@ -1,7 +1,7 @@
 diffgan:
-  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/inference_test
+  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Validation/Images
   file_extention: png
-  output_path: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/output/results_inference
+  output_path: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/validation_results_inference
   checkpoint_path: /home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/output/gen_diffusive_1_15.pth
   step: 100
   device: gpu

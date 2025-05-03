@@ -1,9 +1,7 @@
 segmentation_fingerprint:
-  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/inference_test
+  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Validation/Images
   file_extention: png
-  checkpoint_path: /home/ubuntu/m15kh/Image_Segmentation/segmentation_epoch_49_loss_0.152_2400_2592__2025_4_22.pth
-  output_path: /home/ubuntu/m15kh/Image_Segmentation/U_Net_v2/output/result_inferecence_2400_2592
-  batch_size: 1
-  patch_size: 1360
-  overlap: 0.1
-  use_empatches: false
+  checkpoint_path: /home/ubuntu/m15kh/Image_Segmentation/segmentation_epoch_68_loss_0.154_2400_2593__diarte_2025_4_26.pth
+  output_path: /home/ubuntu/m15kh/Image_Segmentation/U_Net_v2/validation_inference/result_inferecence_2400_2592
+  batch_size: 4
+
