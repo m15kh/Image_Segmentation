@@ -26,7 +26,7 @@ parser.add_argument(
 )
 parser.add_argument(
     '--batch',
-    default=10,
+    default=2,
     help='batch size for data loader',
     type=int
 )

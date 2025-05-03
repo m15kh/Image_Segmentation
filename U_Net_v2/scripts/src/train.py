@@ -73,7 +73,7 @@ class SegmentationTrain(TrainBaseModule):
             self.model.load_state_dict(checkpoint['state_dict'], strict=False)
         
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
-        self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'min', patience=5, verbose=True)
+        self.scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'min', patience=5)
         self.loss_fn = DiceBCELoss()
         self.best_valid_loss = float("inf")
         self.train_losses = []

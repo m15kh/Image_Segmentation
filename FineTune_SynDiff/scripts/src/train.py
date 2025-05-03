@@ -14,7 +14,7 @@ from scripts.models.train import Process
 
 
 if __name__ == '__main__':    
-    params = yaml.safe_load(open('params/train.yaml'))["diffgan"]
+    params = yaml.safe_load(open('/home/ubuntu/m15kh/Image_Segmentation/FineTune_SynDiff/params/train.yaml'))["diffgan"]
     size = params["num_process_per_node"]
     ehancer_train = EnhancerTrain(image_size       = params["image_size"]               ,input_dir            = params["input_dir"],
                                   output_dir       = params["output_dir"]               ,mask_extentions      = params["mask_extentions"],
