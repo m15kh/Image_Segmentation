@@ -3,6 +3,7 @@ import torch.nn as nn
 import os
 import argparse
 import sys
+import time  # Import the time module
 sys.path.append(".")
 from datasets import get_images, get_dataset, get_data_loaders
 from engine import train, validate
@@ -26,7 +27,7 @@ parser.add_argument(
 )
 parser.add_argument(
     '--batch',
-    default=2,
+    default=4,
     help='batch size for data loader',
     type=int
 )
@@ -34,6 +35,8 @@ args = parser.parse_args()
 print(args)
 
 if __name__ == '__main__':
+    start_time = time.time()  # Record the start time
+
     # Create a directory with the model name for outputs.
     out_dir = os.path.join('..', 'outputs')
     out_dir_valid_preds = os.path.join('..', 'outputs', 'valid_preds')
@@ -50,11 +53,10 @@ if __name__ == '__main__':
     print(f"{total_trainable_params:,} training parameters.")
 
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr)
-    # criterion = nn.CrossEntropyLoss() #BUG     # criterion = DiceBCELoss() #BUG 
     criterion = DiceBCELoss()
 
     train_images, train_masks, valid_images, valid_masks = get_images(
-        root_path='/home/ubuntu/m15kh/Image_Segmentation/Finger_Data/Data_split'
+        root_path='/home/ubuntu/m15kh/Image_Segmentation/Finger_Data_Patch/Data_split'
     )
 
     classes_to_train = ALL_CLASSES
@@ -67,7 +69,7 @@ if __name__ == '__main__':
         ALL_CLASSES,
         classes_to_train,
         LABEL_COLORS_LIST,
-        img_size=1024
+        img_size=1600
     )
 
     train_dataloader, valid_dataloader = get_data_loaders(
@@ -122,3 +124,7 @@ if __name__ == '__main__':
         train_pix_acc, valid_pix_acc, train_loss, valid_loss, out_dir
     )
     print('TRAINING COMPLETE')
+
+    end_time = time.time()  # Record the end time
+    total_time = end_time - start_time  # Calculate the total runtime
+    print(f"Total Training Time: {total_time:.2f} seconds")
