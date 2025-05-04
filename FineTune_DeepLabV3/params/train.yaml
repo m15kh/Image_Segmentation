@@ -1,0 +1,17 @@
+# Training configuration parameters
+
+# Training hyperparameters
+epochs: 40
+learning_rate: 0.0001
+batch_size: 4
+
+# Paths
+data_root_path: '/home/ubuntu/m15kh/Image_Segmentation/Finger_Data_Patch/Data_split'
+output_dir: '../outputs'
+valid_preds_dir: '../outputs/valid_preds'
+
+# Model parameters
+image_size: 1600
+
+# Checkpoint
+save_best_model: true

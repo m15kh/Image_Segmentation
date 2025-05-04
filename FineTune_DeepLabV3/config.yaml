@@ -1,5 +1,0 @@
-metrics:
-  gt_dir: /home/ubuntu/m15kh/Image_Segmentation/Validation/masks/
-  pred_dir: /home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/outputs_validation/inference_results_validation/
-  save_dir: /home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/metrics_result/
-  resize_target: gt  # Options: 'gt' or 'pred'

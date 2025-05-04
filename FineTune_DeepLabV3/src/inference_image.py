@@ -1,43 +1,50 @@
 import torch
-import argparse
+import yaml
 import cv2
 import os
-import time  # Import the time module
+import time
 
 from utils import get_segment_labels, draw_segmentation_map, image_overlay
 from PIL import Image
 from config import ALL_CLASSES
 from model import prepare_model
 
-# Construct the argument parser.
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    '-i', '--input', 
-    help='path to input dir', 
-    default='/home/ubuntu/m15kh/Image_Segmentation/Validation/Images'
-)
-args = parser.parse_args()
+# Load configuration from YAML file
+config_path = '/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/params/inference.yaml'
+with open(config_path, 'r') as file:
+    config = yaml.safe_load(file)
 
-out_dir = os.path.join('/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3', 'outputs_validation', 'inference_results_validation')
-os.makedirs(out_dir, exist_ok=True)
+# Extract parameters from config
+INPUT_DIR = config['input_dir']
+OUTPUT_DIR = config['output_dir']
+MODEL_PATH = config['model_path']
+MAX_IMAGE_SIZE = config['max_image_size']
+
+print(f"Configuration loaded from {config_path}")
+print(f"Input directory: {INPUT_DIR}")
+print(f"Output directory: {OUTPUT_DIR}")
+print(f"Model path: {MODEL_PATH}")
+
+# Create output directory if it doesn't exist
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 # Set computation device.
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model = prepare_model(len(ALL_CLASSES))
-ckpt = torch.load('/home/ubuntu/m15kh/Image_Segmentation/best_model_finetuen_deeplabv3_2025)3)27.pth')
+ckpt = torch.load(MODEL_PATH)
 model.load_state_dict(ckpt['model_state_dict'])
 model.eval().to(device)
 
 total_inference_time = 0  # Initialize total inference time
 
-all_image_paths = os.listdir(args.input)
+all_image_paths = os.listdir(INPUT_DIR)
 for i, image_path in enumerate(all_image_paths):
     print(f"Processing Image {i+1}: {image_path}")
-    image = Image.open(os.path.join(args.input, image_path))
+    image = Image.open(os.path.join(INPUT_DIR, image_path))
 
-    if image.size[0] > 1024:
-        image = image.resize((1024, 1024))
+    if image.size[0] > MAX_IMAGE_SIZE:
+        image = image.resize((MAX_IMAGE_SIZE, MAX_IMAGE_SIZE))
     
     image = image.convert('RGB')
 
@@ -55,12 +62,12 @@ for i, image_path in enumerate(all_image_paths):
     print(f"Inference Time for Image {i+1}: {inference_time:.4f} seconds")
     
     # Save the mask
-    mask_path = os.path.join(out_dir, f"{image_path}")
+    mask_path = os.path.join(OUTPUT_DIR, f"{image_path}")
     cv2.imwrite(mask_path, segmented_image)
 
     # Save the blended image
     final_image = image_overlay(image, segmented_image)
-    blended_path = os.path.join(out_dir, f"blended_{image_path}")
+    blended_path = os.path.join(OUTPUT_DIR, f"blended_{image_path}")
     cv2.imwrite(blended_path, final_image)
 
 print(f"Total Inference Time: {total_inference_time:.4f} seconds")  # Print total inference time
