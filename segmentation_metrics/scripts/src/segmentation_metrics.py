@@ -237,7 +237,7 @@ class SegmentationEvaluator:
 
         return gt_mask, pred_mask, True
 
-    def evaluate(self):
+    def evaluate(self, config):
         """
         Evaluate segmentation performance using Dice, IoU, Precision, Recall,
         Pixel Accuracy, ROC-AUC, Contour Accuracy, and Hausdorff Distance.
@@ -431,28 +431,13 @@ class SegmentationEvaluator:
 
 if __name__ == "__main__":
     # Load configuration from YAML file
-    config_path = '/home/ubuntu/m15kh/own/segmentation_metrics/config.yaml'
+    config_path = '/home/ubuntu/m15kh/Image_Segmentation/segmentation_metrics/config.yaml'
     
     # Check if config file exists
     if not os.path.exists(config_path):
         print(f"Config file not found at {config_path}")
-        print("Creating default config file...")
-        
-        # Create default config
-        default_config = {
-            'segmentation': {
-                'gt_dir': '/home/ubuntu/m15kh/Image_Segmentation/Validation/masks/',
-                'pred_dir': '/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/outputs_validation/inference_results_validation/',
-                'save_dir': '/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/metrics_result/'
-            }
-        }
-        
-        # Save default config
-        os.makedirs(os.path.dirname(config_path), exist_ok=True)
-        with open(config_path, 'w') as f:
-            yaml.dump(default_config, f, default_flow_style=False)
-            
-        print(f"Default config file created at {config_path}")
+        print("Please create a configuration file and try again.")
+        exit(1)
     
     # Load config
     with open(config_path, 'r') as f:
@@ -460,9 +445,13 @@ if __name__ == "__main__":
     
     # Get segmentation config
     segmentation_config = config.get('metrics', {})
-    gt_dir = segmentation_config.get('gt_dir', '')
-    pred_dir = segmentation_config.get('pred_dir', '')
-    save_dir = segmentation_config.get('save_dir', '')
+    gt_dir = segmentation_config.get('gt_dir')
+    pred_dir = segmentation_config.get('pred_dir')
+    save_dir = segmentation_config.get('save_dir')
+    
+    if not gt_dir or not pred_dir:
+        print("Ground truth directory and prediction directory must be specified in the config file.")
+        exit(1)
     
     print(f"Using configuration:")
     print(f"  GT Directory: {gt_dir}")
@@ -471,4 +460,4 @@ if __name__ == "__main__":
     
     # Create evaluator and run evaluation
     evaluator = SegmentationEvaluator(gt_dir, pred_dir, save_dir)
-    evaluator.evaluate()
+    evaluator.evaluate(config)
