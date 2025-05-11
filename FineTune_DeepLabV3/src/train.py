@@ -13,7 +13,7 @@ from utils import save_model, SaveBestModel, save_plots
 from loss import DiceBCELoss
 
 # Load configuration from YAML file
-config_path = '/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/params/train.yaml'
+config_path = '/home/ubuntu2/m15kh/Image_Segmentation/FineTune_DeepLabV3/params/train.yaml'
 with open(config_path, 'r') as file:
     config = yaml.safe_load(file)
 

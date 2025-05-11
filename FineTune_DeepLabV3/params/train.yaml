@@ -3,15 +3,15 @@
 # Training hyperparameters
 epochs: 40
 learning_rate: 0.0001
-batch_size: 4
+batch_size: 2
 
 # Paths
-data_root_path: '/home/ubuntu/m15kh/Image_Segmentation/Finger_Data_Patch/Data_split'
+data_root_path: '/home/ubuntu2/m15kh/split_Dataset_fixed_valid'
 output_dir: '../outputs'
 valid_preds_dir: '../outputs/valid_preds'
 
 # Model parameters
-image_size: 1600
+image_size: 1600 #change manully in code #BUG
 
 # Checkpoint
 save_best_model: true

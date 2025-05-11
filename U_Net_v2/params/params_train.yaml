@@ -1,15 +1,15 @@
 segmentation_fingerprint:
-  image_path: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/Dataset/images
+  image_path: /home/ubuntu2/m15kh/Dataset_fixed_valid/Train/images
   image_extention: png
-  mask_path: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/Dataset/masks
+  mask_path: /home/ubuntu2/m15kh/Dataset_fixed_valid/Train/masks
   mask_extention: png
   is_skeleton: false
   is_ridge_white: false
   checkpoint_path: checkpoints/
   experiment_path: results/segmentation_train
-  height: 512
-  width: 512
-  batch_size: 7
-  epochs: 70
+  height: 2400
+  width: 2592
+  batch_size: 1
+  epochs: 60
   learning_rate: 1e-4
   val_percent: 0.1
