@@ -3,15 +3,15 @@
 # Training hyperparameters
 epochs: 40
 learning_rate: 0.0001
-batch_size: 2
+batch_size: 3
 
 # Paths
-data_root_path: '/home/ubuntu2/m15kh/split_Dataset_fixed_valid'
-output_dir: '../outputs'
-valid_preds_dir: '../outputs/valid_preds'
+data_root_path: '/home/ubuntu2/m15kh/Image_Segmentation/New_Dataset_Split/data_2400x2600/train'
+output_dir: '../outputs/data_2400x2600'
+valid_preds_dir: '../outputs/data_2400x2600/valid_preds'
 
 # Model parameters
-image_size: 1600 #change manully in code #BUG
-
+height_size: 1800
+width_size: 2000
 # Checkpoint
 save_best_model: true

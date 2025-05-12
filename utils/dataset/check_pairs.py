@@ -51,8 +51,8 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description='Check if image-mask pairs exist')
-    parser.add_argument('--images', default='/home/rteam2/m15kh/FPR_dataset/Finger_Data/inference_test/images', help='Directory containing images')
-    parser.add_argument('--masks', default='/home/rteam2/m15kh/FPR_dataset/Finger_Data/inference_test/masks', help='Directory containing masks')
+    parser.add_argument('--images', default='/home/ubuntu2/m15kh/Image_Segmentation/New_Dataset_Split/data_2400x2600/train/train_masks', help='Directory containing images')
+    parser.add_argument('--masks', default='/home/ubuntu2/m15kh/Image_Segmentation/New_Dataset_Split/data_2400x2600/train/train_images', help='Directory containing masks')
     args = parser.parse_args()
     
     if not os.path.isdir(args.images):

@@ -33,27 +33,27 @@ def normalize():
     ])
     return transform
 
-def train_transforms(img_size):
+def train_transforms(width_size, height_size):
     """
     Transforms/augmentations for training images and masks.
 
     :param img_size: Integer, for image resize.
     """
     train_image_transform = A.Compose([
-        A.Resize(img_size, img_size, always_apply=True),
+        A.Resize(width_size, height_size, always_apply=True), #BUG manully  change
         A.HorizontalFlip(p=0.5),
         A.RandomBrightnessContrast(p=0.2),
     ])
     return train_image_transform
 
-def valid_transforms(img_size):
+def valid_transforms(width_size, height_size):
     """
     Transforms/augmentations for validation images and masks.
 
     :param img_size: Integer, for image resize.
     """
     valid_image_transform = A.Compose([
-        A.Resize(img_size, img_size, always_apply=True),
+        A.Resize(width_size, height_size, always_apply=True),  #BUG manully  change
     ])
     return valid_image_transform
 
@@ -122,10 +122,11 @@ def get_dataset(
     all_classes,
     classes_to_train,
     label_colors_list,
-    img_size
+    width_size,
+    height_size 
 ):
-    train_tfms = train_transforms(img_size)
-    valid_tfms = valid_transforms(img_size)
+    train_tfms = train_transforms(width_size, height_size)
+    valid_tfms = valid_transforms(width_size, height_size)
     norm_tfms = normalize()
 
     train_dataset = SegmentationDataset(

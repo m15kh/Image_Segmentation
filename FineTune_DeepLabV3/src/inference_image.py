@@ -12,7 +12,7 @@ from config import ALL_CLASSES
 from model import prepare_model
 
 # Load configuration from YAML file
-config_path = '/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/params/inference.yaml'
+config_path = '/home/ubuntu2/m15kh/Image_Segmentation/FineTune_DeepLabV3/params/inference.yaml'
 with open(config_path, 'r') as file:
     config = yaml.safe_load(file)
 

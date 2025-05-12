@@ -24,7 +24,8 @@ BATCH_SIZE = config['batch_size']
 DATA_ROOT_PATH = config['data_root_path']
 OUTPUT_DIR = config['output_dir']
 VALID_PREDS_DIR = config['valid_preds_dir']
-IMAGE_SIZE = config['image_size']
+HEIGHT_SIZE = config['height_size']
+WIDTH_SIZE = config['width_size']
 
 print(f"Configuration loaded from {config_path}")
 print(f"Epochs: {EPOCHS}, Learning Rate: {LEARNING_RATE}, Batch Size: {BATCH_SIZE}")
@@ -64,7 +65,9 @@ if __name__ == '__main__':
         ALL_CLASSES,
         classes_to_train,
         LABEL_COLORS_LIST,
-        img_size=IMAGE_SIZE
+        width_size= WIDTH_SIZE,
+        height_size = HEIGHT_SIZE
+        
     )
 
     train_dataloader, valid_dataloader = get_data_loaders(

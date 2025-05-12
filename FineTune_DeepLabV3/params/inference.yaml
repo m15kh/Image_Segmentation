@@ -1,14 +1,14 @@
 # Inference configuration parameters
 
 # Paths
-input_dir: '/home/ubuntu/m15kh/Image_Segmentation/Validation/Images'
-output_dir: '/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/patch_validation_result'
-model_path: '/home/ubuntu/m15kh/Image_Segmentation/FineTune_DeepLabV3/outputs/best_model.pth'
+input_dir: '/home/ubuntu2/m15kh/Image_Segmentation/test_palm_ex_padding'
+output_dir: '/home/ubuntu2/m15kh/Image_Segmentation/results/deeplab'
+model_path: '/home/ubuntu2/m15kh/Image_Segmentation/checkpoints/deeplabv3_2048-2048_2025-5-11.pth'
 
 # Image processing
-max_image_size: 1600
+max_image_size: 2048
 
 # Patching configuration
-use_patching: true
+use_patching: false
 patch_size: 1600
 patch_overlap: 0
