@@ -1,8 +1,8 @@
 segmentation_fingerprint:
   # input_dir: /home/ubuntu/m15kh/Image_Segmentation/Validation/Images
-  input_dir: /home/ubuntu/m15kh/Image_Segmentation/Finger_Data/inference_test
+  input_dir: /home/ubuntu2/m15kh/Image_Segmentation/inference_test_split/test_2400x2600
   file_extention: png
-  checkpoint_path: /home/ubuntu/m15kh/Image_Segmentation/segmentation_epoch_49_loss_0.152_2400_2592__2025_4_22.pth
-  output_path: /home/ubuntu/m15kh/Image_Segmentation/U_Net_v2/validation_inference/unet
+  checkpoint_path: /home/ubuntu2/m15kh/Image_Segmentation/U_Net_v2/checkpoints/data_2400x2600/segmentation_epoch_23_loss_0.134.pth
+  output_path: /home/ubuntu2/m15kh/Image_Segmentation/U_Net_v2/results/data_2400x2600
   batch_size: 4
 

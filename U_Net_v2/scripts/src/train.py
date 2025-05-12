@@ -203,6 +203,6 @@ if __name__ == "__main__":
         lr=train_params["learning_rate"],
         checkpoint_path=train_params["checkpoint_path"],
         experiment_path=train_params["experiment_path"],
-        val_percent=train_params.get("validation_ratio", 0.2),  # Use the validation ratio from YAML
+        val_percent=train_params.get("validation_ratio", 0.01),  # Use the validation ratio from YAML
         pretrain_path=train_params.get("pretrain_path", None))
     train_segmentation.train()

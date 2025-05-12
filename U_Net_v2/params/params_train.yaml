@@ -1,14 +1,14 @@
 segmentation_fingerprint:
-  image_path: /home/ubuntu2/m15kh/Image_Segmentation/New_Dataset_Split/data_800x2600/train/train_images
+  image_path: /home/ubuntu2/m15kh/Image_Segmentation/New_Dataset_Split/data_2400x2600/train/train_images
   image_extention: png
-  mask_path: /home/ubuntu2/m15kh/Image_Segmentation/New_Dataset_Split/data_800x2600/train/train_masks
+  mask_path: /home/ubuntu2/m15kh/Image_Segmentation/New_Dataset_Split/data_2400x2600/train/train_masks
   mask_extention: png
   is_skeleton: false
   is_ridge_white: false
-  checkpoint_path: checkpoints/data_800x2600
-  experiment_path: results/data_800x2600/segmentation_train
+  checkpoint_path: /home/ubuntu2/m15kh/Image_Segmentation/U_Net_v2/checkpoints/data_2400x2600
+  experiment_path: /home/ubuntu2/m15kh/Image_Segmentation/U_Net_v2/results/data_2400x2600/segmentation_train
   
-  width: 800
+  width: 2400
   height: 2592
   batch_size: 1
   epochs: 60
