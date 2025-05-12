@@ -11,7 +11,7 @@ output_dir: '../outputs/data_2400x2600'
 valid_preds_dir: '../outputs/data_2400x2600/valid_preds'
 
 # Model parameters
-height_size: 1800
-width_size: 2000
+width_size: 1800
+height_size: 2000
 # Checkpoint
 save_best_model: true
